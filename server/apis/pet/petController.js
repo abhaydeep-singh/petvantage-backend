@@ -6,9 +6,10 @@ const addPet = async (req, res) => {
   try {
     let errors = [];
     if (!req.body.name) errors.push("Name is required");
-    if (!req.body.breedID) errors.push("Breed ID is required");
+    if (!req.body.breed) errors.push("Breed is required");
+    if (!req.body.category) errors.push("Category is required");
     if (!req.body.addedByID) errors.push("'Added By' ID is required");
-    if (!req.body.image) errors.push("Image is required");
+    if (!req.file) errors.push("Image is required");
     if (!req.body.desc) errors.push("Description is required");
 
     if (errors.length > 0) {
@@ -23,18 +24,30 @@ const addPet = async (req, res) => {
     // Create a new pet entry
     const petObj = new petModel({
         name:req.body.name,
-        breedID:req.body.breedID, //FIXME: add string here
+        breed:req.body.breed, 
+        category:req.body.category,
         addedByID:req.body.addedByID, 
-        image:req.body.image,
+        image: "pet/" + req.file.filename,
         desc:req.body.desc
     });
     const petData = await petObj.save();
-    // if(!petData){
-    //     res.send({
-    //     status:422,
-    //     success:false,
-    //     message:"Something unexpected happened while saving pet data",
-    //   })}
+
+    if(!petData){
+        return res.send({
+        status:422,
+        success:false,
+        message:"Something unexpected happened while saving pet data",
+      })}
+
+    res.send({
+      status:200,
+      success:true,
+      message:"Pet Data Added Sucesfully",
+      data:petData
+    })
+
+
+
 
 
     // Create breed and category data!! TODO:
@@ -44,7 +57,7 @@ const addPet = async (req, res) => {
           res.send({
           status:422,
           success:false,
-          message:"Something unexpected happened while saving pet data",
+          message:"Internal Server Error",
           error:err
         })}
   }
@@ -94,6 +107,9 @@ const deletePet = async(req,res) => {
   }
 };
 
+
+
+// Generic Apis
 const getAllPet = async(req,res) => {
   try {
       const pets = await petModel.find();
@@ -110,7 +126,7 @@ const getAllPet = async(req,res) => {
         message:"Pets fetched Succesfully",
         data:pets
       })
-      
+
   } catch (error) {
     
     res.send({
@@ -122,4 +138,61 @@ const getAllPet = async(req,res) => {
 }
 };
 
-module.exports = {addPet, deletePet,getAllPet};
+const getByCategory = async(req,res) => {
+  try {
+      const pets = await petModel.find({category:req.body.category});
+      if(!pets){
+        return res.send({
+          status:422,
+          success:false,
+          message:"Pets not found"
+        })
+      }
+      res.send({
+        status:200,
+        success:true,
+        message:"Pets fetched Succesfully",
+        data:pets
+      })
+
+  } catch (error) {
+    
+    res.send({
+    status:422,
+    success:false,
+    message:"Something unexpected happened while fetchinG pets",
+    error:err
+  })
+}
+};
+
+const getByBreed = async(req,res) => {
+  try {
+      const pets = await petModel.find({category:req.body.breed});
+      if(!pets){
+        return res.send({
+          status:422,
+          success:false,
+          message:"Pets not found"
+        })
+      }
+      res.send({
+        status:200,
+        success:true,
+        message:"Pets fetched Succesfully",
+        data:pets
+      })
+
+  } catch (error) {
+    
+    res.send({
+    status:422,
+    success:false,
+    message:"Something unexpected happened while fetchinG pets",
+    error:err
+  })
+}
+};
+
+
+module.exports = {addPet, deletePet, getAllPet, getByCategory, getByBreed};

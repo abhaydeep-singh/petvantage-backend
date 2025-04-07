@@ -1,6 +1,8 @@
 const ngoModel = require("./ngoModel.js");
 const userModel = require("../users/userModel.js");
 const bcrypt = require("bcrypt");
+const petModel = require("../pet/petModel.js");
+
 
 const register = async (req, res) => {
   try {
@@ -89,4 +91,23 @@ const register = async (req, res) => {
   }
 };
 
-module.exports = { register };
+
+const ngoPets = async(req,res) =>{
+  const {_id} = req.body;
+  if(!_id){
+   return res.send({
+      status:422,
+      success:false,
+      message:"ID is required"
+    })
+  }
+  const pets = await petModel.find({addedByID:_id}) // Here _id is loggedin user (NGO) 's ID
+  res.send({
+    status:200,
+    success:true,
+    messgae:"Pets for this id fetched succesfully",
+    data:pets
+  })
+
+};
+module.exports = { register, ngoPets };
