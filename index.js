@@ -25,14 +25,14 @@ app.get("/ping", (req, res) => {
     res.send("Server is active!");
   });
 
-// setInterval(async () => {
-//     try {
-//       await axios.get("https://your-app-name.onrender.com/ping"); // Replace with your actual URL
-//       console.log("Self-ping successful");
-//     } catch (error) {
-//       console.error("Self-ping failed:", error.message);
-//     }
-//   }, 60 * 1000);
+setInterval(async () => {
+    try {
+      await axios.get("https://petvantage-backend.onrender.com/ping"); // Replace with your actual URL
+      console.log("Self-ping successful");
+    } catch (error) {
+      console.error("Self-ping failed:", error.message);
+    }
+  }, 60 * 1000);
 
 app.listen(port,()=>{
     console.log("Server connected to port: ",port);
