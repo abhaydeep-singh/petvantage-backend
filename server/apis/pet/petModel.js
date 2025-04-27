@@ -5,11 +5,12 @@ const petSchema = new mongoose.Schema({
     breed:{type:String},
     category:{type:String},
     addedByID:{
-        type:mongoose.Types.ObjectId,
-        ref:"users"
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"user"
     },
     image:{type:String},
-    desc:{type:String}
+    desc:{type:String},
+    alreadyRequested:{type:Boolean,default:false} 
 
 });
 

@@ -3,6 +3,7 @@ let secretkey = "123#@"
 module.exports = (req,res,next)=>{
     let token = req.headers["authorization"];
     jwt.verify(token,secretkey,function(err,data){
+        // console.log("middleware data: ",data)
         if(err != null){
             res.json({
                 status:422,
@@ -12,6 +13,7 @@ module.exports = (req,res,next)=>{
         }
         else{
             req.decoded = data;
+
             next();
         }
     })

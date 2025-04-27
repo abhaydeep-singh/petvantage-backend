@@ -17,12 +17,20 @@ const userSchema = new mongoose.Schema({
         type:Number, //[1 2 3] 1-admin, 2-ngo, 3-petseeker 
         default:3
     },
-    petSeekerID:{
-        // ref to petseeker 
+    image:{
+        type:String
     },
-    ngoID:{
-        // ref to ngomodal
+    username:{
+        type:String
     },
+    // petSeekerID:{
+    //     type:mongoose.Schema.Types.ObjectId,
+    //     ref:"petseekers"
+    // },
+    // ngoID:{
+    //     type:mongoose.Schema.Types.ObjectId,
+    //     ref:"ngo"
+    // },
     status:{
         type:Boolean,
         default:true
@@ -34,4 +42,4 @@ const userSchema = new mongoose.Schema({
 
 })
 
-module.exports = new mongoose.model("users",userSchema);
+module.exports = new mongoose.model("user",userSchema);

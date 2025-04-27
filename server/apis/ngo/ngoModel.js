@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const ngoSchema = new mongoose.Schema({
     userID:{
         type:mongoose.Types.ObjectId,
-        ref:"users"
+        ref:"user"
     },
     contact:{type:Number},
     image:{type:String},
-    profile:{type:String},
+    // profile:{type:String},
     address:{type:String},
     regNo:{type:String}
 });

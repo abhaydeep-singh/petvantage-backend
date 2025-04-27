@@ -70,5 +70,68 @@ const login =(req,res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  const { userID, oldPassword, newPassword, confirmPassword } = req.body;
+  let errMsgs = [];
 
-module.exports = {login};
+  if (!userID) errMsgs.push("userID is required!!");
+  if (!oldPassword) errMsgs.push("oldPassword is required!!");
+  if (!newPassword) errMsgs.push("newPassword is required!!");
+  if (!confirmPassword) errMsgs.push("confirmPassword is required!!");
+
+  if (errMsgs.length > 0) {
+    return res.status(422).send({
+      status: 422,
+      success: false,
+      message: errMsgs,
+    });
+  }
+
+  if (newPassword !== confirmPassword) {
+    return res.status(422).send({
+      status: 422,
+      success: false,
+      message: "New and confirm passwords don't match",
+    });
+  }
+
+  try {
+    const userData = await userModel.findOne({ _id: userID });
+    if (!userData) {
+      return res.status(404).send({
+        status: 404,
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, userData.password);
+    if (!isMatch) {
+      return res.status(422).send({
+        status: 422,
+        success: false,
+        message: "Old password is incorrect",
+      });
+    }
+
+    userData.password = await bcrypt.hashSync(newPassword, 10);
+    const savedData = await userData.save();
+
+    return res.status(200).send({
+      status: 200,
+      success: true,
+      message: "Password updated successfully",
+    });
+
+  } catch (err) {
+    return res.status(500).send({
+      status: 500,
+      success: false,
+      message: "Internal Server Error",
+      error: err.message,
+    });
+  }
+};
+
+
+module.exports = {login, changePassword};

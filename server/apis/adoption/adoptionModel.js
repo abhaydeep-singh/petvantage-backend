@@ -1,19 +1,21 @@
 const mongoose = require("mongoose");
 
-// Schema according to O7's keys
 const adoptionSchema = new mongoose.Schema({
-    addedByID:{
-        type:mongoose.Types.ObjectId,
-        ref:"users"
-    },
     petID:{
-        type:mongoose.Types.ObjectId,
-        ref:"pets"
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"pet" //use same name as u mentioned in model do    i=not use 's' if not mentioned specifically
     },
-    idProof:{type:String},
-    incomeCertificate:{type:String},
-    bankStatement:{type:String},
-    address:{type:String}
+    reqUserID:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"user"
+    },
+    desc:{
+        type:String
+    },
+    adoptionStatus:{
+        type:String,
+        default:"pending" //aprooved, rejected
+    }
 });
 
 module.exports = mongoose.model("adoption",adoptionSchema);
