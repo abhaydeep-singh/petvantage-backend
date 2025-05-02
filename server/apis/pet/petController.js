@@ -234,7 +234,7 @@ const getSinglePet = async(req,res) =>{
 
 const getAllPet = async(req,res) => {
   try {
-      const pets = await petModel.find();
+      const pets = await petModel.find().populate("addedByID");
       if(!pets){
         return res.send({
           status:422,

@@ -15,6 +15,14 @@ const adoptionSchema = new mongoose.Schema({
     adoptionStatus:{
         type:String,
         default:"pending" //aprooved, rejected
+    },
+    status:{
+        type:Boolean,
+        default:true
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now()
     }
 });
 

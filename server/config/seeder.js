@@ -6,7 +6,8 @@ const seederReg = ()=>{
         if (data == null) { 
             let userObj = new userModel();
             userObj.email = "admin@gmail.com";
-            userObj.password = bcrypt.hashSync("123",10)
+            userObj.password = bcrypt.hashSync("123",10);
+            userObj.userType = 1;
             userObj.save()
             .then((data)=>{
                 console.log("Admin added Succesfully");

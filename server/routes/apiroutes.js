@@ -6,6 +6,8 @@ const petController = require("../apis/pet/petController.js");
 const adoptionController = require("../apis/adoption/adoptionController.js");
 const dashboardController = require("../apis/dashboard/dashboardController.js");
 const postController = require("../apis/post/postController.js");
+const blogController = require("../apis/blog/blogController.js");
+const productController = require("../apis/products/productController.js");
 // const createMulter = require("../middleware/multer.js");
 
 
@@ -30,7 +32,8 @@ const postController = require("../apis/post/postController.js");
 
 // User Routes (LOGIN) common for all
 
-const multer = require("multer")
+const multer = require("multer");
+const productModel = require("../apis/products/productModel.js");
 const memoryStorage = multer.memoryStorage()
 const upload = multer({memoryStorage})
 
@@ -95,6 +98,19 @@ routes.post("/post/getsingle",postController.getSingle);
 routes.post("/post/get",postController.getAllPosts);
 routes.post("/post/pagination",postController.getPagination);
 
+// Blog Routes
+routes.post("/blog/add",blogController.addBlog);
+routes.post("/blog/all",blogController.getAll);
+routes.post("/blog/single",blogController.getSingle);
+routes.post("/blog/addcomment",blogController.addComment);
+routes.post("/blog/allcomments",blogController.getComments);
+routes.post("/blog/deletecomment",blogController.deleteComment);
+
+// Products
+routes.post("/product/add",upload.single("image"),productController.addProduct);
+routes.post("/product/update",upload.single("image"),productController.updateProduct);
+routes.post("/product/delete",productController.deleteProduct);
+routes.post("/product/all",productController.getAllProducts);
 
 
 

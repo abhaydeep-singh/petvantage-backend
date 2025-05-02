@@ -22,8 +22,8 @@ const register = async (req, res) => {
     if (!req.body.contact) {
       errMsgs.push("contact is required!!");
     }
-    if (!req.body.address) {
-      errMsgs.push("address is required!!");
+    if (!req.body.username) {
+      errMsgs.push("username is required!!");
     }
     if (!req.body.regNo) {
       errMsgs.push("Registration No is required!!");
@@ -90,7 +90,7 @@ const register = async (req, res) => {
         }
       }
 
-      ngoObj.address = req.body.address;
+      ngoObj.username = req.body.username;
       ngoObj.regNo = req.body.regNo;
       const savedNgo = await ngoObj.save();
       // Handle "NGO Not Saved" if u want
@@ -133,7 +133,7 @@ const ngoPets = async (req, res) => {
 };
 
 const updateProfile = async(req,res) => {
-  const {_id, name, email, contact, address, regNo} = req.body;
+  const {_id, name, email, contact, username, regNo} = req.body;
   // const {image} = req.file; //canot destruct
   
   if(!_id){
@@ -171,7 +171,7 @@ const updateProfile = async(req,res) => {
       }
     }
     if(contact){ savedData.contact = contact }
-    if(address){ savedData.address = address }
+    if(username){ savedData.username = username }
     if(regNo){ savedData.regNo = regNo }
 
     let updatedData = await savedData.save();
