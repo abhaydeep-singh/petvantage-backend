@@ -71,7 +71,8 @@ const login =(req,res) => {
 };
 
 const changePassword = async (req, res) => {
-  const { userID, oldPassword, newPassword, confirmPassword } = req.body;
+  // const userID = req.decoded._id
+  const {userID ,oldPassword, newPassword, confirmPassword } = req.body;
   let errMsgs = [];
 
   if (!userID) errMsgs.push("userID is required!!");
