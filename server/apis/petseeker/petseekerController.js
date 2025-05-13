@@ -120,6 +120,7 @@ const updateProfile = async(req,res) => {
     if(name){ savedUserData.name = name }
     if(email){ savedUserData.email = email }
     if(req.file){
+      // console.log("Received file:", req.file.originalname);
       try {
         let url = await uploadImg(req.file.buffer);
         savedData.image = url;
@@ -135,7 +136,7 @@ const updateProfile = async(req,res) => {
     }
     if(contact){ savedData.contact = contact }
     if(address){ savedData.address = address }
-    if(regNo){ savedData.regNo = regNo }
+    // if(regNo){ savedData.regNo = regNo }
 
     let updatedData = await savedData.save();
     let updatedUserData = await savedUserData.save();
@@ -151,7 +152,7 @@ const updateProfile = async(req,res) => {
       status: 200,
       success: true,
       message: "Profile Updated Succesfully",
-      data:updatedData //FIXME: it is sending old (not updated) populated data
+      data:updatedData 
     })
   } catch (error) {
     console.log(error)
@@ -173,7 +174,7 @@ const getSinglePetSeeker = async(req,res) =>{
         message:"ID is required"
       })
     }
-    const data = await petseekerModel.findOne({_id:req.body._id})
+    const data = await petseekerModel.findOne({_id:req.body._id}).populate("userID")
     if(!data){
       return res.send({
         status:422,
@@ -274,4 +275,30 @@ const getPagination = async (req, res) => {
   }
 };
 
-module.exports = {register, getSinglePetSeeker, getAllPetSeeker, updateProfile, getPagination}
+const getPetSeekerProfile = async (req, res) => {
+  try {
+    const userId = req.decoded._id; // assuming you're using a middleware to add this
+
+    const petSeeker = await petseekerModel.findOne({ userID:userId });
+
+    if (!petSeeker) {
+      return res.status(404).json({ message: "Pet seeker not found" });
+    }
+     res.send({
+      status: 200,
+      success: true,
+      message: "Data loaded succesfully",
+      data: petSeeker
+    })
+  } catch (error) {
+    res.send({
+      status: 500,
+      success: false,
+      message: "Internal server error",
+      error: error
+    })
+  }
+};
+
+
+module.exports = {register, getSinglePetSeeker, getAllPetSeeker, updateProfile, getPagination, getPetSeekerProfile}

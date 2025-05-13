@@ -63,8 +63,9 @@ routes.post("/ngo/pagination",ngoController.getPagination);
 // PetSeeker Routes
 routes.post("/petseeker/getsingle",petseekerController.getSinglePetSeeker); 
 routes.post("/petseeker/get",petseekerController.getAllPetSeeker); 
-routes.post("/petseeker/update",petseekerController.updateProfile); //TODO: Not tested Yet
+routes.post("/petseeker/update",upload.single("image"),petseekerController.updateProfile); //TODO: Not tested Yet
 routes.post("/petseeker/pagination",petseekerController.getPagination);
+routes.post("/petseeker/me",petseekerController.getPetSeekerProfile);
 
 
 
