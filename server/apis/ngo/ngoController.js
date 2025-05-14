@@ -52,6 +52,7 @@ const register = async (req, res) => {
       const userObj = userModel()
       userObj.name = req.body.name
       userObj.email = req.body.email
+      userObj.username = req.body.username
       userObj.password = bcrypt.hashSync(req.body.password, 10)
       userObj.userType = 2
         if (req.file) {
@@ -90,7 +91,7 @@ const register = async (req, res) => {
         }
       }
 
-      ngoObj.username = req.body.username;
+      
       ngoObj.regNo = req.body.regNo;
       const savedNgo = await ngoObj.save();
       // Handle "NGO Not Saved" if u want
@@ -237,7 +238,7 @@ try {
       message:"ID is required"
     })
   }
-  const data = await ngoModel.findOne({_id:req.body._id})
+  const data = await ngoModel.findOne({_id:req.body._id}).populate("userID")
   if(!data){
     return res.send({
       status:422,
@@ -310,4 +311,29 @@ const getPagination = async (req, res) => {
   }
 };
 
-module.exports = { register, ngoPets, getAllNgo, getSingleNgo ,updateProfile, getPagination };
+const getNgoProfile = async (req, res) => {
+  try {
+    const userId = req.decoded._id; // assuming you're using a middleware to add this
+
+    const petSeeker = await ngoModel.findOne({ userID:userId });
+
+    if (!petSeeker) {
+      return res.status(404).json({ message: "Pet seeker not found" });
+    }
+     res.send({
+      status: 200,
+      success: true,
+      message: "Data loaded succesfully",
+      data: petSeeker
+    })
+  } catch (error) {
+    res.send({
+      status: 500,
+      success: false,
+      message: "Internal server error",
+      error: error
+    })
+  }
+};
+
+module.exports = { register, ngoPets, getAllNgo, getSingleNgo ,updateProfile, getPagination, getNgoProfile};

@@ -56,8 +56,10 @@ routes.use(require("../middleware/middleware.js"));
 routes.post("/ngo/mypets",ngoController.ngoPets);
 routes.post("/ngo/getall",ngoController.getAllNgo);
 routes.post("/ngo/getsingle",ngoController.getSingleNgo);
-routes.post("/ngo/update",ngoController.updateProfile);
-routes.post("/ngo/pagination",ngoController.getPagination); 
+routes.post("/ngo/update",upload.single("image"),ngoController.updateProfile);
+routes.post("/ngo/pagination",ngoController.getPagination);
+routes.post("/ngo/me",ngoController.getNgoProfile); 
+
 
 
 // PetSeeker Routes

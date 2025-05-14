@@ -38,7 +38,7 @@ const register = async (req, res) => {
       if (data == null) {
         let userObj = new userModel();
         userObj.name = req.body.name;
-        userObj.user = req.body.username;
+        userObj.username = req.body.username;
         userObj.email = req.body.email;
         userObj.password = bcrypt.hashSync(req.body.password, 10);
         userObj.userType = 3;
@@ -103,12 +103,13 @@ const updateProfile = async(req,res) => {
     return res.send({
       status: 422,
       success: false,
-      message: "ID is required",
+      message: "ID is required", 
     });
   }
   try {
     let savedData = await petseekerModel.findOne({_id:_id}).populate("userID")
     // res.send(savedData.userID._id)
+    console.log(savedData)
     let savedUserData = await userModel.findOne({_id:savedData.userID._id})
     if(!savedData || !savedUserData){
       return res.send({
@@ -201,7 +202,7 @@ const getSinglePetSeeker = async(req,res) =>{
 
 const getAllPetSeeker = async(req,res) => {
   try {
-      const data = await petseekerModel.find();
+      const data = await petseekerModel.find().populate("userID");
       if(!data){
         return res.send({
           status:422,
