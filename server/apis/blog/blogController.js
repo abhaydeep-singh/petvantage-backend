@@ -232,7 +232,13 @@ const deleteComment = async (req, res) => {
 
 const getComments = async (req, res) => {
     try {
-        const data = await blogModel.find().populate("commentIDs");
+        const data = await blogModel.find().populate({
+    path: 'commentIDs',
+    populate: {
+      path: 'userID',
+      model: 'user',
+    }
+  });
         if (!data) {
             return res.send({
                 status: 422,
