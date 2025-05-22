@@ -33,7 +33,7 @@ const login =(req,res) => {
               });
         } else {
             // compare password
-            console.log(data.status)
+            // console.log(data.status)
             if(data.status == false){
               return res.send({
                         status: 422,
