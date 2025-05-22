@@ -76,60 +76,56 @@ const addPet = async (req, res) => {
   }
 };
 
-const deletePet = async(req,res) => {
-
+const deletePet = async (req, res) => {
   try {
-    const {_id} = req.body;
-    if(!_id){
+    const { _id } = req.body;
+
+    if (!_id) {
       return res.send({
-        status:422,
-        success:false,
-        message:"ID is required"
-      })
+        status: 422,
+        success: false,
+        message: "ID is required"
+      });
     }
 
-    const data = await petModel.findOne({ _id: _id });
-    if(!data){
+    const deletedPet = await petModel.findByIdAndDelete(_id);
+
+    if (!deletedPet) {
       return res.send({
-        status:422,
-        success:false,
-        message:"Pet not found"
-      })
+        status: 404,
+        success: false,
+        message: "Pet not found"
+      });
     }
 
-    data.status = false;
+    return res.send({
+      status: 200,
+      success: true,
+      message: "Pet deleted successfully",
+      data: deletedPet
+    });
 
-    const updatedData = await data.save();
-    if (updatedData) {
-      return res.send({
-        status:200,
-        success:true,
-        message:"Pet Deleted Softly",
-        data:updatedData
-      })
-    }
-
-  } catch(err) {
-    
-          res.send({
-          status:422,
-          success:false,
-          message:"Something unexpected happened while saving pet data",
-          error:err
-        })
+  } catch (err) {
+    res.send({
+      status: 500,
+      success: false,
+      message: "Something unexpected happened while deleting pet",
+      error: err
+    });
   }
 };
+
 
 const updatePet = async (req, res) => {
   try {
     let errors = [];
-
+    // const { _id,name,breed,category,desc} = req.body;
     if (!req.body._id) errors.push("Pet ID is required");
-    if (!req.body.name) errors.push("Name is required");
-    if (!req.body.breed) errors.push("Breed is required");
-    if (!req.body.category) errors.push("Category is required");
-    if (!req.body.desc) errors.push("Description is required");
-    if (!req.file) errors.push("Image is required");
+    // if (!req.body.name) errors.push("Name is required");
+    // if (!req.body.breed) errors.push("Breed is required");
+    // if (!req.body.category) errors.push("Category is required");
+    // if (!req.body.desc) errors.push("Description is required");
+    // if (!req.file) errors.push("Image is required");
 
     if (errors.length > 0) {
       return res.send({
@@ -151,10 +147,10 @@ const updatePet = async (req, res) => {
     }
 
     // Update pet fields
-    pet.name = req.body.name;
-    pet.breed = req.body.breed;
-    pet.category = req.body.category;
-    pet.desc = req.body.desc;
+    if(req.body.name){pet.name = req.body.name;}
+    if(req.body.breed){pet.breed = req.body.breed;}
+    if(req.body.category){pet.category = req.body.category;}
+    if(req.body.desc){pet.desc = req.body.desc;}
     if (req.file) {
             try {
               let url = await uploadImg(req.file.buffer);

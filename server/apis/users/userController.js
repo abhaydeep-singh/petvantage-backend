@@ -33,6 +33,14 @@ const login =(req,res) => {
               });
         } else {
             // compare password
+            console.log(data.status)
+            if(data.status == false){
+              return res.send({
+                        status: 422,
+                        success: false,
+                        message: "Account Blocked! Please Contact Admin",
+                      })
+            }
             bcrypt.compare(req.body.password,data.password,(err,isMatch)=>{
                 if (!isMatch) {
                       res.send({

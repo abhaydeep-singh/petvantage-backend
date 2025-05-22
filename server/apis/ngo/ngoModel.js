@@ -9,7 +9,9 @@ const ngoSchema = new mongoose.Schema({
     image:{type:String},
     // profile:{type:String},
     address:{type:String},
-    regNo:{type:String}
+    regNo:{type:String},
+    status:{type:Boolean, default:true},
+    createdAt:{type:Date, default:Date.now()}
 });
 
 module.exports = new mongoose.model("ngo",ngoSchema);

@@ -134,8 +134,10 @@ const ngoPets = async (req, res) => {
 };
 
 const updateProfile = async(req,res) => {
-  const {_id, name, email, contact, username, regNo} = req.body;
+  const {_id, name, email, contact, username, regNo, status} = req.body;
   // const {image} = req.file; //canot destruct
+  console.log("status: ",status);
+  
   
   if(!_id){
     return res.send({
@@ -174,6 +176,10 @@ const updateProfile = async(req,res) => {
     if(contact){ savedData.contact = contact }
     if(username){ savedData.username = username }
     if(regNo){ savedData.regNo = regNo }
+    if (typeof status === "boolean") {
+      savedData.status = status;
+      savedUserData.status = status;
+    }
 
     let updatedData = await savedData.save();
     let updatedUserData = await savedUserData.save();

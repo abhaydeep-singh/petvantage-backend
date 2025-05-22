@@ -75,7 +75,7 @@ routes.post("/petseeker/me",petseekerController.getPetSeekerProfile);
 // const petupload = createMulter("pet"); // saves in /public/pet
 routes.post("/pet/add",upload.single("image"),petController.addPet);
 routes.post("/pet/delete",petController.deletePet); //soft delete
-routes.post("/pet/update",petController.updatePet); //TODO: Not tested Yet
+routes.post("/pet/update",upload.single("image"),petController.updatePet); //TODO: Not tested Yet
 routes.post("/pet/getsingle",petController.getSinglePet);
 routes.post("/pet/getall",petController.getAllPet); //Get 
 routes.post("/pet/getbycat",petController.getByCategory);

@@ -96,8 +96,9 @@ const register = async (req, res) => {
 
 
 const updateProfile = async(req,res) => {
-  const {_id, name, email, contact, address} = req.body;
+  const {_id, name, email, contact, address, status } = req.body;
   // const {image} = req.file; //canot destruct
+  console.log("status:",status);
   
   if(!_id){
     return res.send({
@@ -109,7 +110,7 @@ const updateProfile = async(req,res) => {
   try {
     let savedData = await petseekerModel.findOne({_id:_id}).populate("userID")
     // res.send(savedData.userID._id)
-    console.log(savedData)
+    // console.log(savedData)
     let savedUserData = await userModel.findOne({_id:savedData.userID._id})
     if(!savedData || !savedUserData){
       return res.send({
@@ -137,6 +138,9 @@ const updateProfile = async(req,res) => {
     }
     if(contact){ savedData.contact = contact }
     if(address){ savedData.address = address }
+    if (typeof status === "boolean") {
+      savedData.status = status;
+      }
     // if(regNo){ savedData.regNo = regNo }
 
     let updatedData = await savedData.save();
